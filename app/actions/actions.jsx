@@ -17,6 +17,14 @@ export var toggleShowCompleted = () => {
         type: 'TOGGLE_SHOW_COMPLETED'
     }
 };
+
+export var addTodos = (todos) => {
+    return {
+        type: 'ADD_TODOS',
+        todos
+    }
+};
+
 export var toggleTodo = (id) => {
     return {
         type: 'TOGGLE_TODO',
