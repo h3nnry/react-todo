@@ -29,12 +29,17 @@ describe('Reducers', () => {
             it('should add new todo', () => {
                 var action = {
                     type: 'ADD_TODO',
-                    text: 'Create new react app'
+                    todo: {
+                        id: 'abc123',
+                        text: 'Something todo',
+                        completed: false,
+                        createdAt: 9874623
+                    }
                 };
                 var res = reducers.todosReducer(df([]), df(action));
 
                 expect(res.length).toEqual(1);
-                expect(res[0].text).toEqual(action.text);
+                expect(res[0]).toEqual(action.todo);
             });
 
             it('should toggle todo', () => {
@@ -54,7 +59,7 @@ describe('Reducers', () => {
                 expect(res[0].completed).toEqual(false);
                 expect(res[0].completedAt).toEqual(undefined);
             });
-            it('should addexisting todos', () => {
+            it('should add existing todos', () => {
                 var todos = [{
                     id: '123',
                     text: 'anyone',
