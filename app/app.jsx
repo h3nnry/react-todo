@@ -10,15 +10,7 @@ var TodoApi = require('TodoApi');
 
 // import './../playground/firebase/index';
 
-store.subscribe(() => {
-    var state = store.getState();
-    console.log('New state', state);
-
-    TodoApi.setTodos(state.todos);
-});
-
-var initialTodos = TodoApi.getTodos();
-store.dispatch(actions.addTodos(initialTodos));
+store.dispatch(actions.startAddTodos());
 
 // store.dispatch(actions.addTodo('Go to sleep'));
 // store.dispatch(actions.setSearchText('sleep'));
