@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import firebase, {firebaseRef} from'app/firebase/';
+import firebase, {firebaseRef, githubProvider} from 'app/firebase/';
 
 export var setSearchText = (searchText) => {
     return {
@@ -9,17 +9,17 @@ export var setSearchText = (searchText) => {
     };
 };
 
+export var toggleShowCompleted = () => {
+    return {
+        type: 'TOGGLE_SHOW_COMPLETED'
+    };
+};
+
 export var addTodo = (todo) => {
     return {
         type: 'ADD_TODO',
         todo
     };
-};
-
-export var toggleShowCompleted = () => {
-    return {
-        type: 'TOGGLE_SHOW_COMPLETED'
-    }
 };
 
 export var startAddTodo = (text) => {
@@ -38,32 +38,32 @@ export var startAddTodo = (text) => {
                 id: todoRef.key
             }));
         });
-    }
+    };
 };
 
 export var addTodos = (todos) => {
     return {
         type: 'ADD_TODOS',
         todos
-    }
+    };
 };
 
 export var startAddTodos = () => {
     return (dispatch, getState) => {
         var todosRef = firebaseRef.child('todos');
 
-        todosRef.once('value').then((snapshot) => {
+        return todosRef.once('value').then((snapshot) => {
             var todos = snapshot.val() || {};
-            var parseTodos = [];
+            var parsedTodos = [];
 
             Object.keys(todos).forEach((todoId) => {
-                parseTodos.push({
+                parsedTodos.push({
                     id: todoId,
                     ...todos[todoId]
                 });
             });
 
-            dispatch(addTodos(parseTodos));
+            dispatch(addTodos(parsedTodos));
         });
     };
 };
@@ -73,7 +73,7 @@ export var updateTodo = (id, updates) => {
         type: 'UPDATE_TODO',
         id,
         updates
-    }
+    };
 };
 
 export var startToggleTodo = (id, completed) => {
@@ -87,5 +87,23 @@ export var startToggleTodo = (id, completed) => {
         return todoRef.update(updates).then(() => {
             dispatch(updateTodo(id, updates));
         });
-    }
+    };
+};
+
+export var startLogin = () => {
+    return (dispatch, getState) => {
+        return firebase.auth().signInWithPopup(githubProvider).then((result) => {
+            console.log('Auth worked!', result);
+        }, (error) => {
+            console.log('Unable to auth', error);
+        });
+    };
+};
+
+export var startLogout = () => {
+    return (dispatch, getState) => {
+        return firebase.auth().signOut().then(() => {
+            console.log('Logged out!');
+        });
+    };
 };
